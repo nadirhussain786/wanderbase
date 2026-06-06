@@ -25,7 +25,7 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
-      <div className="relative h-64 bg-gradient-to-br from-primary to-secondary overflow-hidden">
+      <div className="relative h-56 sm:h-64 bg-linear-to-br from-primary to-secondary overflow-hidden">
         <div className="absolute inset-0 flex flex-col items-center justify-center pt-16 text-center">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
@@ -56,7 +56,7 @@ export default function ContactPage() {
             className="space-y-6"
           >
             {/* Quick contact */}
-            <div className="bg-gradient-to-br from-primary to-secondary rounded-3xl p-8 text-white">
+            <div className="bg-linear-to-br from-primary to-secondary rounded-3xl p-8 text-white">
               <MessageSquare className="w-10 h-10 mb-5 text-white/80" />
               <h3 className="text-2xl font-bold font-display mb-3">Talk to an Expert</h3>
               <p className="text-white/80 text-sm leading-relaxed mb-6">
@@ -184,7 +184,7 @@ export default function ContactPage() {
 
                   <button
                     type="submit"
-                    className="w-full flex items-center justify-center gap-2 py-4 bg-gradient-to-r from-primary to-secondary text-white font-bold rounded-2xl hover:shadow-xl hover:scale-[1.01] transition-all duration-300 text-lg"
+                    className="w-full flex items-center justify-center gap-2 py-4 bg-linear-to-r from-primary to-secondary text-white font-bold rounded-2xl hover:shadow-xl hover:scale-[1.01] transition-all duration-300 text-lg"
                   >
                     <Send className="w-5 h-5" />
                     Send Message

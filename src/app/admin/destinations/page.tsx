@@ -111,7 +111,7 @@ export default function AdminDestinationsPage() {
           <motion.div key={d.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow group">
             <div className="relative h-44 overflow-hidden">
               <img src={d.imageUrl} alt={d.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
               <div className="absolute top-3 right-3 flex gap-1.5">
                 <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold ${statusColors[d.status]}`}>{d.status}</span>
                 {d.featured && <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-accent text-white">Featured</span>}

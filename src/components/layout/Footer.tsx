@@ -73,7 +73,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-2 mb-6 group">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 bg-linear-to-br from-primary to-secondary rounded-xl flex items-center justify-center">
                 <Globe className="w-5 h-5 text-white" />
               </div>
               <span className="text-xl font-bold text-white font-display">
@@ -107,7 +107,7 @@ export default function Footer() {
                   key={label}
                   href={href}
                   aria-label={label}
-                  className="w-9 h-9 bg-white/5 hover:bg-gradient-to-br hover:from-primary hover:to-secondary rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
+                  className="w-9 h-9 bg-white/5 hover:bg-linear-to-br hover:from-primary hover:to-secondary rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
                 >
                   <Icon />
                 </a>

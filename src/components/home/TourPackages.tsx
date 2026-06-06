@@ -71,7 +71,7 @@ export default function TourPackages() {
               alt={tourPackages[0].title}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-r from-black/20 to-transparent" />
             {tourPackages[0].badge && (
               <span className={cn("absolute top-5 left-5 px-3 py-1.5 text-xs font-bold rounded-full", badgeStyle[tourPackages[0].badge])}>
                 ⭐ {tourPackages[0].badge}
@@ -123,7 +123,7 @@ export default function TourPackages() {
               </div>
               <Link
                 href={`/tours/${tourPackages[0].id}`}
-                className="px-7 py-3.5 bg-gradient-to-r from-primary to-secondary text-white font-bold rounded-2xl hover:shadow-xl hover:-translate-y-px transition-all duration-300"
+                className="px-7 py-3.5 bg-linear-to-r from-primary to-secondary text-white font-bold rounded-2xl hover:shadow-xl hover:-translate-y-px transition-all duration-300"
               >
                 Book Now
               </Link>
@@ -147,7 +147,7 @@ export default function TourPackages() {
                   alt={pkg.title}
                   className="w-full h-full object-cover group-hover:scale-[1.07] transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/55 to-transparent" />
 
                 {pkg.badge && (
                   <span className={cn("absolute top-3 right-3 px-2.5 py-1 text-[11px] font-bold rounded-full", badgeStyle[pkg.badge])}>

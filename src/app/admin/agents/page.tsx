@@ -41,7 +41,7 @@ export default function AdminAgentsPage() {
           { label: "Pending Approval", value: agents.filter((a) => a.status === "PENDING").length, icon: Clock, color: "from-amber-400 to-orange-500" },
         ].map((s) => (
           <div key={s.label} className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex items-center gap-4">
-            <div className={`w-12 h-12 bg-gradient-to-br ${s.color} rounded-xl flex items-center justify-center`}>
+            <div className={`w-12 h-12 bg-linear-to-br ${s.color} rounded-xl flex items-center justify-center`}>
               <s.icon className="w-5 h-5 text-white" />
             </div>
             <div>

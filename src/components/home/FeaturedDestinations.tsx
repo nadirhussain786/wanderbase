@@ -105,7 +105,7 @@ export default function FeaturedDestinations() {
                     alt={dest.name}
                     className="w-full h-full object-cover group-hover:scale-[1.07] transition-transform duration-700 ease-in-out"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent" />
 
                   {/* Like */}
                   <button
@@ -170,7 +170,7 @@ export default function FeaturedDestinations() {
                     </div>
                     <Link
                       href={`/destinations/${dest.id}`}
-                      className="px-5 py-2.5 bg-gradient-to-r from-primary to-secondary text-white text-sm font-semibold rounded-xl shadow hover:shadow-lg hover:-translate-y-px transition-all duration-300"
+                      className="px-5 py-2.5 bg-linear-to-r from-primary to-secondary text-white text-sm font-semibold rounded-xl shadow hover:shadow-lg hover:-translate-y-px transition-all duration-300"
                     >
                       Explore →
                     </Link>

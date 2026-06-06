@@ -2,8 +2,17 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Clock, User, Tag, Search, ArrowRight } from "lucide-react";
+import { Clock, Search, ArrowRight } from "lucide-react";
 import Link from "next/link";
+
+const slugMap: Record<string, string> = {
+  "1": "hidden-gems-southeast-asia",
+  "2": "safari-packing-guide",
+  "3": "greek-islands-ferry",
+  "4": "japan-budget-travel",
+  "5": "machu-picchu-inca-trail",
+  "6": "sustainable-travel",
+};
 
 const posts = [
   {
@@ -98,7 +107,7 @@ export default function BlogPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
-      <div className="relative h-64 bg-gradient-to-br from-primary to-secondary overflow-hidden">
+      <div className="relative h-64 bg-linear-to-br from-primary to-secondary overflow-hidden">
         <div className="absolute inset-0 flex flex-col items-center justify-center pt-16 text-center px-4">
           <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="text-4xl md:text-5xl font-bold text-white font-display mb-3">
             Travel Stories & Tips
@@ -141,39 +150,40 @@ export default function BlogPage() {
         {featured.length > 0 && (
           <div className="grid md:grid-cols-2 gap-6 mb-10">
             {featured.map((post, i) => (
-              <motion.article
-                key={post.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 transition-all duration-400 hover:-translate-y-1"
-              >
-                <div className="relative h-56 overflow-hidden">
-                  <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                  <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 bg-accent text-white text-xs font-bold rounded-full">Featured</span>
-                  </div>
-                  <div className="absolute bottom-4 left-4">
-                    <span className="px-3 py-1 bg-white/20 backdrop-blur-md text-white text-xs font-medium rounded-full border border-white/30">{post.category}</span>
-                  </div>
-                </div>
-                <div className="p-6">
-                  <h2 className="text-xl font-bold text-gray-900 font-display mb-2 group-hover:text-primary transition-colors line-clamp-2">
-                    {post.title}
-                  </h2>
-                  <p className="text-gray-500 text-sm leading-relaxed mb-4 line-clamp-2">{post.excerpt}</p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <img src={post.authorImg} alt={post.author} className="w-7 h-7 rounded-full object-cover" />
-                      <span className="text-gray-600 text-sm font-medium">{post.author}</span>
+              <Link key={post.id} href={`/blog/${slugMap[post.id]}`}>
+                <motion.article
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 transition-all duration-400 hover:-translate-y-1 cursor-pointer h-full"
+                >
+                  <div className="relative h-56 overflow-hidden">
+                    <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
+                    <div className="absolute top-4 left-4">
+                      <span className="px-3 py-1 bg-accent text-white text-xs font-bold rounded-full">Featured</span>
                     </div>
-                    <div className="flex items-center gap-3 text-gray-400 text-xs">
-                      <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" />{post.readTime}</span>
+                    <div className="absolute bottom-4 left-4">
+                      <span className="px-3 py-1 bg-white/20 backdrop-blur-md text-white text-xs font-medium rounded-full border border-white/30">{post.category}</span>
                     </div>
                   </div>
-                </div>
-              </motion.article>
+                  <div className="p-6">
+                    <h2 className="text-xl font-bold text-gray-900 font-display mb-2 group-hover:text-primary transition-colors line-clamp-2">
+                      {post.title}
+                    </h2>
+                    <p className="text-gray-500 text-sm leading-relaxed mb-4 line-clamp-2">{post.excerpt}</p>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <img src={post.authorImg} alt={post.author} className="w-7 h-7 rounded-full object-cover" />
+                        <span className="text-gray-600 text-sm font-medium">{post.author}</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-gray-400 text-xs">
+                        <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" />{post.readTime}</span>
+                      </div>
+                    </div>
+                  </div>
+                </motion.article>
+              </Link>
             ))}
           </div>
         )}
@@ -181,32 +191,33 @@ export default function BlogPage() {
         {/* Regular Posts */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {regular.map((post, i) => (
-            <motion.article
-              key={post.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.08 }}
-              className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 transition-all hover:-translate-y-1"
-            >
-              <div className="relative h-44 overflow-hidden">
-                <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-600" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                <div className="absolute bottom-3 left-3">
-                  <span className="px-2.5 py-0.5 bg-white/20 backdrop-blur-md text-white text-xs font-medium rounded-full border border-white/30">{post.category}</span>
-                </div>
-              </div>
-              <div className="p-5">
-                <h3 className="font-bold text-gray-900 mb-2 font-display line-clamp-2 group-hover:text-primary transition-colors">{post.title}</h3>
-                <p className="text-gray-500 text-sm line-clamp-2 mb-4">{post.excerpt}</p>
-                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                  <div className="flex items-center gap-2">
-                    <img src={post.authorImg} alt={post.author} className="w-6 h-6 rounded-full object-cover" />
-                    <span className="text-gray-600 text-xs font-medium">{post.author}</span>
+            <Link key={post.id} href={`/blog/${slugMap[post.id]}`}>
+              <motion.article
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.08 }}
+                className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 transition-all hover:-translate-y-1 cursor-pointer h-full"
+              >
+                <div className="relative h-44 overflow-hidden">
+                  <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-600" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent" />
+                  <div className="absolute bottom-3 left-3">
+                    <span className="px-2.5 py-0.5 bg-white/20 backdrop-blur-md text-white text-xs font-medium rounded-full border border-white/30">{post.category}</span>
                   </div>
-                  <span className="text-gray-400 text-xs flex items-center gap-1"><Clock className="w-3 h-3" />{post.readTime}</span>
                 </div>
-              </div>
-            </motion.article>
+                <div className="p-5">
+                  <h3 className="font-bold text-gray-900 mb-2 font-display line-clamp-2 group-hover:text-primary transition-colors">{post.title}</h3>
+                  <p className="text-gray-500 text-sm line-clamp-2 mb-4">{post.excerpt}</p>
+                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                    <div className="flex items-center gap-2">
+                      <img src={post.authorImg} alt={post.author} className="w-6 h-6 rounded-full object-cover" />
+                      <span className="text-gray-600 text-xs font-medium">{post.author}</span>
+                    </div>
+                    <span className="text-gray-400 text-xs flex items-center gap-1"><Clock className="w-3 h-3" />{post.readTime}</span>
+                  </div>
+                </div>
+              </motion.article>
+            </Link>
           ))}
         </div>
       </div>

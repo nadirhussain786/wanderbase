@@ -68,8 +68,8 @@ export default function Hero() {
       </AnimatePresence>
 
       {/* ── Gradient overlays ───────────────────────────────── */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/75 z-[1]" />
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/50 via-transparent to-transparent z-[1]" />
+      <div className="absolute inset-0 bg-linear-to-b from-black/70 via-black/40 to-black/75 z-[1]" />
+      <div className="absolute inset-0 bg-linear-to-r from-primary/50 via-transparent to-transparent z-[1]" />
 
       {/* ── Slide dots ─────────────────────────────────────── */}
       <div className="absolute bottom-32 left-1/2 -translate-x-1/2 z-10 flex gap-2">
@@ -164,7 +164,7 @@ export default function Hero() {
         >
           <Link
             href="/tours"
-            className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl font-semibold text-white text-base bg-gradient-to-r from-accent to-gold shadow-lg shadow-accent/30 hover:shadow-xl hover:shadow-accent/40 hover:-translate-y-0.5 transition-all duration-300"
+            className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl font-semibold text-white text-base bg-linear-to-r from-accent to-gold shadow-lg shadow-accent/30 hover:shadow-xl hover:shadow-accent/40 hover:-translate-y-0.5 transition-all duration-300"
             style={{ fontFamily: "var(--font-inter, system-ui, sans-serif)" }}
           >
             Explore Tours
@@ -236,7 +236,7 @@ export default function Hero() {
               {/* Search btn */}
               <Link
                 href="/tours"
-                className="flex items-center justify-center gap-2 rounded-xl px-5 py-3.5 font-semibold text-white text-sm bg-gradient-to-r from-primary to-secondary hover:opacity-90 hover:-translate-y-0.5 transition-all duration-300 sm:col-span-1"
+                className="flex items-center justify-center gap-2 rounded-xl px-5 py-3.5 font-semibold text-white text-sm bg-linear-to-r from-primary to-secondary hover:opacity-90 hover:-translate-y-0.5 transition-all duration-300 sm:col-span-1"
                 style={{ fontFamily: "var(--font-inter, system-ui, sans-serif)" }}
               >
                 <Search className="w-4 h-4" />

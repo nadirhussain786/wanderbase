@@ -1,15 +1,39 @@
 "use client";
 
-import { use } from "react";
+import { use, useState } from "react";
 import { motion } from "framer-motion";
 import { MapPin, Clock, Users, Star, CheckCircle, Calendar, Shield, ArrowLeft, Heart, Share2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { tourPackages } from "@/lib/data";
 import { formatPrice } from "@/lib/utils";
+import toast from "react-hot-toast";
 
 export default function TourDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const tour = tourPackages.find((t) => t.id === id) ?? tourPackages[0];
+  const router = useRouter();
+
+  const [departureDate, setDepartureDate] = useState("");
+  const [guests, setGuests]               = useState(1);
+  const [booking, setBooking]             = useState(false);
+  const [booked, setBooked]               = useState(false);
+
+  const totalPrice = tour.price * guests;
+
+  const handleBook = async () => {
+    if (!departureDate) { toast.error("Please select a departure date"); return; }
+    setBooking(true);
+    const res = await fetch("/api/bookings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tourId: id, departureDate, guests, totalPrice }),
+    });
+    setBooking(false);
+    if (res.status === 401) { toast.error("Please sign in to book"); router.push("/auth/signin"); return; }
+    if (res.ok) { setBooked(true); toast.success("Booking confirmed! Check your dashboard."); }
+    else { toast.error("Booking failed. Please try again."); }
+  };
 
   const difficultyColors: Record<string, string> = {
     Easy: "text-green-600 bg-green-50 border-green-200",
@@ -22,7 +46,7 @@ export default function TourDetailPage({ params }: { params: Promise<{ id: strin
       {/* Hero Image */}
       <div className="relative h-[60vh] overflow-hidden">
         <img src={tour.image} alt={tour.title} className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
 
         {/* Back */}
         <div className="absolute top-6 left-6">
@@ -110,7 +134,7 @@ export default function TourDetailPage({ params }: { params: Promise<{ id: strin
                 <div className="space-y-4">
                   {tour.itinerary.map((day) => (
                     <div key={day.day} className="flex gap-4">
-                      <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center text-white font-bold text-sm">
+                      <div className="flex-shrink-0 w-10 h-10 bg-linear-to-br from-primary to-secondary rounded-xl flex items-center justify-center text-white font-bold text-sm">
                         {day.day}
                       </div>
                       <div className="flex-1 pb-5 border-b border-gray-100">
@@ -129,7 +153,7 @@ export default function TourDetailPage({ params }: { params: Promise<{ id: strin
             )}
 
             {/* Trust Badges */}
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {[
                 { icon: Shield, label: "Fully Insured", desc: "100% protected" },
                 { icon: Star, label: "Top Rated", desc: `${tour.rating}/5 stars` },
@@ -155,7 +179,7 @@ export default function TourDetailPage({ params }: { params: Promise<{ id: strin
               className="bg-white rounded-2xl border border-gray-100 shadow-lg sticky top-24 overflow-hidden"
             >
               {/* Price */}
-              <div className="bg-gradient-to-br from-primary to-secondary p-6 text-white">
+              <div className="bg-linear-to-br from-primary to-secondary p-6 text-white">
                 <p className="text-white/70 text-sm">Starting from</p>
                 <div className="flex items-end gap-2 mb-1">
                   <span className="text-3xl font-bold font-display">{formatPrice(tour.price)}</span>
@@ -169,51 +193,70 @@ export default function TourDetailPage({ params }: { params: Promise<{ id: strin
 
               {/* Form */}
               <div className="p-6 space-y-4">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Departure Date</label>
-                  <div className="flex items-center gap-2 px-4 py-3 bg-gray-50 rounded-xl border border-gray-200">
-                    <Calendar className="w-4 h-4 text-gray-400" />
-                    <input type="date" className="bg-transparent flex-1 text-sm text-gray-700 outline-none" />
+                {booked ? (
+                  <div className="text-center py-6">
+                    <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <CheckCircle className="w-7 h-7 text-green-600" />
+                    </div>
+                    <p className="font-bold text-gray-900 mb-1">Booking Confirmed!</p>
+                    <p className="text-sm text-gray-500 mb-4">View your trip details in your dashboard.</p>
+                    <Link href="/dashboard" className="block w-full py-3 bg-primary text-white font-semibold rounded-xl text-sm text-center">Go to Dashboard</Link>
                   </div>
-                </div>
+                ) : (
+                  <>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Departure Date</label>
+                      <div className="flex items-center gap-2 px-4 py-3 bg-gray-50 rounded-xl border border-gray-200 focus-within:border-primary transition-colors">
+                        <Calendar className="w-4 h-4 text-gray-400 shrink-0" />
+                        <input
+                          type="date"
+                          value={departureDate}
+                          onChange={(e) => setDepartureDate(e.target.value)}
+                          min={new Date().toISOString().split("T")[0]}
+                          className="bg-transparent flex-1 text-sm text-gray-700 outline-none"
+                        />
+                      </div>
+                    </div>
 
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Number of Guests</label>
-                  <div className="flex items-center gap-2 px-4 py-3 bg-gray-50 rounded-xl border border-gray-200">
-                    <Users className="w-4 h-4 text-gray-400" />
-                    <select className="bg-transparent flex-1 text-sm text-gray-700 outline-none">
-                      {["1 Person", "2 People", "3 People", "4 People", "5+ People"].map((opt) => (
-                        <option key={opt}>{opt}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Number of Guests</label>
+                      <div className="flex items-center gap-2 px-4 py-3 bg-gray-50 rounded-xl border border-gray-200 focus-within:border-primary transition-colors">
+                        <Users className="w-4 h-4 text-gray-400 shrink-0" />
+                        <select value={guests} onChange={(e) => setGuests(Number(e.target.value))} className="bg-transparent flex-1 text-sm text-gray-700 outline-none">
+                          {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
+                            <option key={n} value={n}>{n} {n === 1 ? "Person" : "People"}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
 
-                <div className="pt-2">
-                  <div className="flex justify-between text-sm text-gray-500 mb-2">
-                    <span>{formatPrice(tour.price)} × 2 guests</span>
-                    <span className="font-semibold text-gray-900">{formatPrice(tour.price * 2)}</span>
-                  </div>
-                  <div className="flex justify-between text-sm text-gray-500 mb-4">
-                    <span>Service fee</span>
-                    <span className="font-semibold text-gray-900">{formatPrice(150)}</span>
-                  </div>
-                  <div className="flex justify-between font-bold text-gray-900 text-lg border-t border-gray-100 pt-3">
-                    <span>Total</span>
-                    <span className="text-primary">{formatPrice(tour.price * 2 + 150)}</span>
-                  </div>
-                </div>
+                    <div className="pt-2">
+                      <div className="flex justify-between text-sm text-gray-500 mb-2">
+                        <span>{formatPrice(tour.price)} × {guests} guest{guests > 1 ? "s" : ""}</span>
+                        <span className="font-semibold text-gray-900">{formatPrice(totalPrice)}</span>
+                      </div>
+                      <div className="flex justify-between font-bold text-gray-900 text-lg border-t border-gray-100 pt-3">
+                        <span>Total</span>
+                        <span className="text-primary">{formatPrice(totalPrice)}</span>
+                      </div>
+                    </div>
 
-                <button className="w-full py-4 bg-gradient-to-r from-accent to-gold text-white font-bold rounded-2xl hover:shadow-xl hover:scale-[1.02] transition-all duration-300 text-lg">
-                  Book This Tour
-                </button>
+                    <button
+                      onClick={handleBook}
+                      disabled={booking}
+                      className="w-full py-4 bg-linear-to-r from-accent to-gold text-white font-bold rounded-2xl hover:shadow-xl hover:scale-[1.02] transition-all duration-300 text-lg disabled:opacity-60 disabled:scale-100"
+                    >
+                      {booking ? "Processing…" : "Book This Tour"}
+                    </button>
 
-                <div className="flex items-center gap-2 justify-center text-gray-400 text-xs">
-                  <Shield className="w-3.5 h-3.5 text-green-500" />
-                  Free cancellation up to 48 hours before departure
-                </div>
+                    <div className="flex items-center gap-2 justify-center text-gray-400 text-xs">
+                      <Shield className="w-3.5 h-3.5 text-green-500" />
+                      Free cancellation up to 48 hours before departure
+                    </div>
 
-                <p className="text-center text-gray-400 text-xs">Departures: {tour.departure}</p>
+                    <p className="text-center text-gray-400 text-xs">Departures: {tour.departure}</p>
+                  </>
+                )}
               </div>
             </motion.div>
           </div>

@@ -46,7 +46,7 @@ export default function AgentDashboard() {
       </div>
 
       {/* Referral Code */}
-      <div className="bg-gradient-to-r from-secondary to-primary rounded-2xl p-6 mb-7 text-white">
+      <div className="bg-linear-to-r from-secondary to-primary rounded-2xl p-6 mb-7 text-white">
         <p className="text-white/70 text-sm font-medium mb-2">Your Referral Code</p>
         <div className="flex items-center gap-4 flex-wrap">
           <div className="flex items-center gap-3 bg-white/15 backdrop-blur-sm rounded-xl px-5 py-3">
@@ -75,7 +75,7 @@ export default function AgentDashboard() {
         ].map((s, i) => (
           <motion.div key={s.label} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
             <div className="flex items-start justify-between mb-4">
-              <div className={`w-11 h-11 bg-gradient-to-br ${s.grad} rounded-xl flex items-center justify-center`}><s.icon className="w-5 h-5 text-white" /></div>
+              <div className={`w-11 h-11 bg-linear-to-br ${s.grad} rounded-xl flex items-center justify-center`}><s.icon className="w-5 h-5 text-white" /></div>
               <span className="text-[11px] font-semibold text-gray-400 bg-gray-50 px-2 py-1 rounded-full">{s.change}</span>
             </div>
             <p className="text-2xl font-bold text-gray-900 mb-0.5">{s.value}</p>

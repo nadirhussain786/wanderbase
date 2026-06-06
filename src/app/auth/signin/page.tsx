@@ -70,7 +70,7 @@ export default function SignInPage() {
         >
           {/* Logo */}
           <Link href="/" className="inline-flex items-center gap-2.5 mb-10">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-md">
+            <div className="w-10 h-10 bg-linear-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-md">
               <Globe className="w-5 h-5 text-white" />
             </div>
             <span className="text-xl font-bold text-primary" style={{ fontFamily: "var(--font-playfair,'Playfair Display',Georgia,serif)" }}>
@@ -90,7 +90,7 @@ export default function SignInPage() {
                   key={acc.label}
                   onClick={() => handleDemo(acc)}
                   disabled={loading}
-                  className={`flex flex-col items-center gap-1.5 p-3 rounded-xl bg-gradient-to-br ${acc.color} text-white text-xs font-semibold hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-60`}
+                  className={`flex flex-col items-center gap-1.5 p-3 rounded-xl bg-linear-to-br ${acc.color} text-white text-xs font-semibold hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-60`}
                 >
                   <span className="text-lg">{acc.icon}</span>
                   {acc.label}
@@ -150,7 +150,7 @@ export default function SignInPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-primary to-secondary text-white font-semibold rounded-xl hover:shadow-lg hover:-translate-y-px transition-all duration-300 disabled:opacity-60 disabled:translate-y-0"
+              className="w-full flex items-center justify-center gap-2 py-3.5 bg-linear-to-r from-primary to-secondary text-white font-semibold rounded-xl hover:shadow-lg hover:-translate-y-px transition-all duration-300 disabled:opacity-60 disabled:translate-y-0"
             >
               {loading ? (
                 <span className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
@@ -168,7 +168,7 @@ export default function SignInPage() {
       </div>
 
       {/* Right — Visual */}
-      <div className="hidden lg:flex flex-1 relative bg-gradient-to-br from-primary via-[#0a3460] to-secondary overflow-hidden">
+      <div className="hidden lg:flex flex-1 relative bg-linear-to-br from-primary via-[#0a3460] to-secondary overflow-hidden">
         <div className="absolute inset-0">
           <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1200&q=85" alt="" className="w-full h-full object-cover opacity-20" />
         </div>

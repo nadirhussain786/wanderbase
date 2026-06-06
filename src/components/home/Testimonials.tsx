@@ -33,7 +33,7 @@ export default function Testimonials() {
             className="text-4xl md:text-5xl font-bold text-gray-900 font-display mb-4"
           >
             What Our{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-secondary">
               Travelers Say
             </span>
           </motion.h2>
@@ -54,7 +54,7 @@ export default function Testimonials() {
           transition={{ delay: 0.3 }}
           className="relative mb-12"
         >
-          <div className="bg-gradient-to-br from-primary to-secondary rounded-3xl p-1">
+          <div className="bg-linear-to-br from-primary to-secondary rounded-3xl p-1">
             <div className="bg-white rounded-[22px] p-8 md:p-12 relative overflow-hidden">
               {/* Background quote */}
               <div className="absolute top-0 right-0 text-gray-50 text-[200px] leading-none font-serif select-none pointer-events-none -translate-y-8 translate-x-8">

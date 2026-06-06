@@ -64,7 +64,7 @@ export default function AdminDashboard() {
             className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
           >
             <div className="flex items-start justify-between mb-4">
-              <div className={`w-11 h-11 bg-gradient-to-br ${card.grad} rounded-xl flex items-center justify-center shadow-sm`}>
+              <div className={`w-11 h-11 bg-linear-to-br ${card.grad} rounded-xl flex items-center justify-center shadow-sm`}>
                 <card.icon className="w-5 h-5 text-white" />
               </div>
               <span className="flex items-center gap-1 text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">

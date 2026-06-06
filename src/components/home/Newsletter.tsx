@@ -19,7 +19,7 @@ export default function Newsletter() {
 
   return (
     <section className="py-28 relative overflow-hidden" ref={ref}>
-      <div className="absolute inset-0 bg-gradient-to-br from-dark via-primary to-secondary" />
+      <div className="absolute inset-0 bg-linear-to-br from-dark via-primary to-secondary" />
       <div
         className="absolute inset-0 opacity-[.05] pointer-events-none"
         style={{
@@ -95,7 +95,7 @@ export default function Newsletter() {
               </div>
               <button
                 type="submit"
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-accent to-gold text-white font-semibold text-sm rounded-xl hover:opacity-90 hover:-translate-y-px transition-all duration-200 shrink-0"
+                className="flex items-center gap-2 px-6 py-3 bg-linear-to-r from-accent to-gold text-white font-semibold text-sm rounded-xl hover:opacity-90 hover:-translate-y-px transition-all duration-200 shrink-0"
               >
                 <Send className="w-4 h-4" />
                 Subscribe

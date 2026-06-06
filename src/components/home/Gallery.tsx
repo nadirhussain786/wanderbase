@@ -36,7 +36,7 @@ export default function Gallery() {
             className="text-4xl md:text-5xl font-bold text-gray-900 font-display mb-4"
           >
             Travel{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-secondary">
               Gallery
             </span>
           </motion.h2>
@@ -96,7 +96,7 @@ export default function Gallery() {
                   alt={img.alt}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center mb-3">
                     <ZoomIn className="w-5 h-5 text-white" />
@@ -133,7 +133,7 @@ export default function Gallery() {
               onClick={(e) => e.stopPropagation()}
             >
               <img src={selectedImg.src} alt={selectedImg.alt} className="w-full h-full object-cover" />
-              <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
+              <div className="absolute bottom-0 left-0 right-0 p-6 bg-linear-to-t from-black/80 to-transparent">
                 <div className="flex items-center gap-2 text-white">
                   <MapPin className="w-4 h-4 text-accent" />
                   <span className="font-semibold">{selectedImg.location}</span>

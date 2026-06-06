@@ -58,7 +58,7 @@ export default function WhyChooseUs() {
                 alt="Happy travelers"
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-primary/60 to-transparent" />
               <div className="absolute bottom-5 left-5 right-5">
                 <div className="glass rounded-2xl px-5 py-4">
                   <p className="text-white text-sm font-medium leading-snug">
@@ -81,7 +81,7 @@ export default function WhyChooseUs() {
                 className="group bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-350"
               >
                 <div className={`w-12 h-12 ${f.bg} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                  <div className={`w-8 h-8 bg-gradient-to-br ${f.grad} rounded-lg flex items-center justify-center`}>
+                  <div className={`w-8 h-8 bg-linear-to-br ${f.grad} rounded-lg flex items-center justify-center`}>
                     <f.icon className="w-4 h-4 text-white" />
                   </div>
                 </div>

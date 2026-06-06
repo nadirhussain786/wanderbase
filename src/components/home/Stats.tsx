@@ -18,7 +18,7 @@ export default function Stats() {
   return (
     <section ref={ref} className="relative py-24 overflow-hidden">
       {/* Gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#0b3764] via-primary to-secondary" />
+      <div className="absolute inset-0 bg-linear-to-br from-[#0b3764] via-primary to-secondary" />
       {/* Subtle grid */}
       <div
         className="absolute inset-0 opacity-[.07] pointer-events-none"
@@ -43,7 +43,7 @@ export default function Stats() {
               className="text-center group"
             >
               {/* Icon */}
-              <div className={`inline-flex w-16 h-16 items-center justify-center rounded-2xl bg-gradient-to-br ${s.grad} shadow-lg mb-6 group-hover:scale-110 transition-transform duration-300`}>
+              <div className={`inline-flex w-16 h-16 items-center justify-center rounded-2xl bg-linear-to-br ${s.grad} shadow-lg mb-6 group-hover:scale-110 transition-transform duration-300`}>
                 <s.icon className="w-7 h-7 text-white" strokeWidth={1.75} />
               </div>
 

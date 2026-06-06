@@ -27,7 +27,7 @@ export default function AboutPage() {
           alt="About us"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/80 to-dark/80" />
+        <div className="absolute inset-0 bg-linear-to-b from-primary/80 to-dark/80" />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center pt-16 px-4">
           <motion.h1
             initial={{ opacity: 0, y: 40 }}
@@ -60,7 +60,7 @@ export default function AboutPage() {
               <span className="text-secondary font-semibold text-sm uppercase tracking-widest">Est. 2009</span>
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 font-display mt-3 mb-6 leading-tight">
                 15 Years of Creating{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-secondary">
                   Unforgettable
                 </span>{" "}
                 Journeys
@@ -98,7 +98,7 @@ export default function AboutPage() {
                 <img src="https://images.unsplash.com/photo-1516426122078-c23e76319801?w=400&q=80" alt="" className="rounded-2xl h-48 w-full object-cover -mt-8" />
                 <img src="https://images.unsplash.com/photo-1573843981267-be1999ff37cd?w=400&q=80" alt="" className="rounded-2xl h-48 w-full object-cover" />
               </div>
-              <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-gradient-to-br from-accent to-gold rounded-3xl flex items-center justify-center shadow-2xl">
+              <div className="absolute -bottom-4 -right-4 w-28 h-28 bg-linear-to-br from-accent to-gold rounded-3xl flex items-center justify-center shadow-2xl z-10">
                 <div className="text-center">
                   <p className="text-white text-3xl font-bold font-display">15</p>
                   <p className="text-white/90 text-xs font-medium">Years</p>
@@ -126,7 +126,7 @@ export default function AboutPage() {
                 transition={{ delay: i * 0.1 }}
                 className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-100 group"
               >
-                <div className={`w-12 h-12 bg-gradient-to-br ${v.color} rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform`}>
+                <div className={`w-12 h-12 bg-linear-to-br ${v.color} rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform`}>
                   <v.icon className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="font-bold text-gray-900 text-lg mb-2 font-display">{v.title}</h3>

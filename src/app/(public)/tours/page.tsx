@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Search, Star, Clock, Users, MapPin, CheckCircle, ArrowRight, Filter } from "lucide-react";
+import { Search, Star, Clock, Users, MapPin, CheckCircle, ArrowRight, Filter, Heart } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { tourPackages } from "@/lib/data";
 import { formatPrice, cn } from "@/lib/utils";
+import toast from "react-hot-toast";
 
 const categories = ["All", "Beach & Culture", "Cultural & Spiritual", "Adventure", "Luxury", "Wildlife", "Cultural"];
 const durations = ["All", "1-5 days", "6-10 days", "11-15 days", "15+ days"];
@@ -27,10 +29,36 @@ const difficultyColors: Record<string, string> = {
 };
 
 export default function ToursPage() {
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("All");
+  const [search, setSearch]       = useState("");
+  const [category, setCategory]   = useState("All");
   const [difficulty, setDifficulty] = useState("All");
-  const [view, setView] = useState<"grid" | "list">("grid");
+  const [view, setView]           = useState<"grid" | "list">("grid");
+  const [liked, setLiked]         = useState<Set<string>>(new Set());
+  const router = useRouter();
+
+  useEffect(() => {
+    fetch("/api/user/wishlist")
+      .then((r) => r.ok ? r.json() : [])
+      .then((items: any[]) => {
+        const ids = items.filter((i) => i.tourId).map((i) => i.tourId);
+        setLiked(new Set(ids));
+      })
+      .catch(() => {});
+  }, []);
+
+  const toggleLike = async (id: string) => {
+    const res = await fetch("/api/user/wishlist", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tourId: id }),
+    });
+    if (res.status === 401) { toast.error("Sign in to save tours"); router.push("/auth/signin"); return; }
+    if (res.ok) {
+      const { added } = await res.json();
+      setLiked((prev) => { const next = new Set(prev); added ? next.add(id) : next.delete(id); return next; });
+      toast.success(added ? "Added to wishlist" : "Removed from wishlist");
+    }
+  };
 
   const filtered = tourPackages.filter((t) => {
     const matchSearch = t.title.toLowerCase().includes(search.toLowerCase()) || t.destination.toLowerCase().includes(search.toLowerCase());
@@ -42,7 +70,7 @@ export default function ToursPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
-      <div className="relative h-72 bg-gradient-to-br from-primary to-secondary overflow-hidden">
+      <div className="relative h-72 bg-linear-to-br from-primary to-secondary overflow-hidden">
         <div className="absolute inset-0">
           <img
             src="https://images.unsplash.com/photo-1530789253388-582c481c54b0?w=1600&q=80"
@@ -131,15 +159,23 @@ export default function ToursPage() {
                   alt={pkg.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
                 {pkg.badge && (
                   <span className={cn("absolute top-3 left-3 px-2.5 py-1 text-xs font-bold rounded-full", badgeColors[pkg.badge])}>
                     {pkg.badge}
                   </span>
                 )}
-                <span className={cn("absolute top-3 right-3 px-2.5 py-1 text-xs font-semibold rounded-full", difficultyColors[pkg.difficulty])}>
-                  {pkg.difficulty}
-                </span>
+                <div className="absolute top-3 right-3 flex items-center gap-1.5">
+                  <button
+                    onClick={(e) => { e.preventDefault(); toggleLike(pkg.id); }}
+                    className={`p-1.5 rounded-full backdrop-blur-md transition-all ${liked.has(pkg.id) ? "bg-red-500 text-white" : "bg-white/20 text-white hover:bg-white/40"}`}
+                  >
+                    <Heart className={`w-3.5 h-3.5 ${liked.has(pkg.id) ? "fill-white" : ""}`} />
+                  </button>
+                  <span className={cn("px-2.5 py-1 text-xs font-semibold rounded-full", difficultyColors[pkg.difficulty])}>
+                    {pkg.difficulty}
+                  </span>
+                </div>
                 <div className="absolute bottom-3 left-3 text-white">
                   <div className="flex items-center gap-1.5">
                     <MapPin className="w-3.5 h-3.5 text-accent" />
@@ -179,7 +215,7 @@ export default function ToursPage() {
                   </div>
                   <Link
                     href={`/tours/${pkg.id}`}
-                    className="flex items-center gap-1.5 px-5 py-2.5 bg-gradient-to-r from-primary to-secondary text-white text-sm font-bold rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300"
+                    className="flex items-center gap-1.5 px-5 py-2.5 bg-linear-to-r from-primary to-secondary text-white text-sm font-bold rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300"
                   >
                     Book Now <ArrowRight className="w-3.5 h-3.5" />
                   </Link>

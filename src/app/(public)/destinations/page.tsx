@@ -1,23 +1,50 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Search, MapPin, Star, Clock, Filter, Heart, SlidersHorizontal } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { destinations } from "@/lib/data";
 import { formatPrice } from "@/lib/utils";
+import toast from "react-hot-toast";
 
 const continents = ["All", "Europe", "Asia", "Africa", "South America", "Americas"];
 const categories = ["All", "Beach", "Adventure", "Culture", "Luxury", "Wildlife", "Romance", "Trekking"];
 const sortOptions = ["Featured", "Price: Low to High", "Price: High to Low", "Rating", "Reviews"];
 
 export default function DestinationsPage() {
-  const [search, setSearch] = useState("");
+  const [search, setSearch]       = useState("");
   const [continent, setContinent] = useState("All");
-  const [category, setCategory] = useState("All");
-  const [sort, setSort] = useState("Featured");
-  const [liked, setLiked] = useState<string[]>([]);
+  const [category, setCategory]   = useState("All");
+  const [sort, setSort]           = useState("Featured");
+  const [liked, setLiked]         = useState<Set<string>>(new Set());
   const [showFilters, setShowFilters] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    fetch("/api/user/wishlist")
+      .then((r) => r.ok ? r.json() : [])
+      .then((items: any[]) => {
+        const ids = items.filter((i) => i.destinationId).map((i) => i.destinationId);
+        setLiked(new Set(ids));
+      })
+      .catch(() => {});
+  }, []);
+
+  const toggleLike = async (id: string) => {
+    const res = await fetch("/api/user/wishlist", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ destinationId: id }),
+    });
+    if (res.status === 401) { toast.error("Sign in to save destinations"); router.push("/auth/signin"); return; }
+    if (res.ok) {
+      const { added } = await res.json();
+      setLiked((prev) => { const next = new Set(prev); added ? next.add(id) : next.delete(id); return next; });
+      toast.success(added ? "Added to wishlist" : "Removed from wishlist");
+    }
+  };
 
   const filtered = destinations
     .filter((d) => {
@@ -34,12 +61,10 @@ export default function DestinationsPage() {
       return Number(b.featured) - Number(a.featured);
     });
 
-  const toggleLike = (id: string) => setLiked((p) => p.includes(id) ? p.filter((x) => x !== id) : [...p, id]);
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Banner */}
-      <div className="relative h-80 bg-gradient-to-br from-primary via-[#0a3460] to-secondary overflow-hidden">
+      <div className="relative h-80 bg-linear-to-br from-primary via-[#0a3460] to-secondary overflow-hidden">
         <div className="absolute inset-0">
           <img
             src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1600&q=80"
@@ -86,7 +111,7 @@ export default function DestinationsPage() {
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value)}
-              className="px-4 py-3 bg-gray-50 rounded-xl border border-gray-200 text-sm font-medium text-gray-700 focus:border-primary min-w-[180px]"
+              className="px-4 py-3 bg-gray-50 rounded-xl border border-gray-200 text-sm font-medium text-gray-700 focus:border-primary min-w-45"
             >
               {sortOptions.map((s) => (
                 <option key={s} value={s}>{s}</option>
@@ -189,14 +214,14 @@ export default function DestinationsPage() {
                   alt={dest.name}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-600"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
                 <button
                   onClick={() => toggleLike(dest.id)}
                   className={`absolute top-3 right-3 p-2 rounded-full backdrop-blur-md transition-all ${
-                    liked.includes(dest.id) ? "bg-red-500 text-white" : "bg-white/20 text-white hover:bg-white/40"
+                    liked.has(dest.id) ? "bg-red-500 text-white" : "bg-white/20 text-white hover:bg-white/40"
                   }`}
                 >
-                  <Heart className={`w-3.5 h-3.5 ${liked.includes(dest.id) ? "fill-white" : ""}`} />
+                  <Heart className={`w-3.5 h-3.5 ${liked.has(dest.id) ? "fill-white" : ""}`} />
                 </button>
                 <div className="absolute top-3 left-3 flex gap-1.5">
                   {dest.category.slice(0, 1).map((cat) => (
