@@ -1,0 +1,284 @@
+// ─── WanderBase Database Schema ───────────────────────────────────────────────
+// Database: SQLite (dev) — switch provider to "postgresql" for production
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+// SQLite doesn't support native enums → stored as String with app-level validation
+
+// ─── Users ────────────────────────────────────────────────────────────────────
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  password     String
+  // Role: ADMIN | AGENT | USER
+  role         String   @default("USER")
+  avatar       String?
+  phone        String?
+  bio          String?
+  country      String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  agent        Agent?
+  bookings     Booking[]
+  reviews      Review[]
+  articles     Article[]
+  photos       Photo[]
+  wishlists    Wishlist[]
+
+  @@map("users")
+}
+
+// ─── Agent Profile ─────────────────────────────────────────────────────────
+
+model Agent {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  referralCode   String   @unique
+  commissionRate Float    @default(10.0)
+  companyName    String?
+  website        String?
+  // Status: PENDING | ACTIVE | SUSPENDED
+  status         String   @default("PENDING")
+  totalEarnings  Float    @default(0)
+  pendingAmount  Float    @default(0)
+  notes          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  commissions    Commission[]
+  referrals      Referral[]
+
+  @@map("agents")
+}
+
+// Tracks which agent referred which user
+model Referral {
+  id        String   @id @default(cuid())
+  agentId   String
+  agent     Agent    @relation(fields: [agentId], references: [id])
+  userId    String
+  createdAt DateTime @default(now())
+
+  @@unique([agentId, userId])
+  @@map("referrals")
+}
+
+// ─── Destinations ─────────────────────────────────────────────────────────
+
+model Destination {
+  id          String   @id @default(cuid())
+  name        String
+  country     String
+  continent   String
+  description String
+  imageUrl    String
+  // JSON strings for arrays
+  images      String   @default("[]")
+  category    String   @default("[]")
+  highlights  String   @default("[]")
+  rating      Float    @default(0)
+  reviewCount Int      @default(0)
+  priceFrom   Float
+  duration    String
+  // Status: ACTIVE | DRAFT | ARCHIVED
+  status      String   @default("ACTIVE")
+  featured    Boolean  @default(false)
+  createdBy   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tours       Tour[]
+  photos      Photo[]
+  wishlists   Wishlist[]
+
+  @@map("destinations")
+}
+
+// ─── Tours ────────────────────────────────────────────────────────────────
+
+model Tour {
+  id            String      @id @default(cuid())
+  title         String
+  destinationId String
+  destination   Destination @relation(fields: [destinationId], references: [id])
+  description   String
+  imageUrl      String
+  price         Float
+  originalPrice Float
+  duration      String
+  groupSizeMin  Int         @default(2)
+  groupSizeMax  Int         @default(12)
+  // Difficulty: EASY | MODERATE | CHALLENGING
+  difficulty    String      @default("EASY")
+  // JSON strings for arrays/objects
+  includes      String      @default("[]")
+  itinerary     String      @default("[]")
+  category      String
+  badge         String?
+  departure     String      @default("Every week")
+  rating        Float       @default(0)
+  reviewCount   Int         @default(0)
+  // Status: ACTIVE | DRAFT | ARCHIVED
+  status        String      @default("ACTIVE")
+  featured      Boolean     @default(false)
+  createdBy     String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  bookings      Booking[]
+  reviews       Review[]
+  wishlists     Wishlist[]
+
+  @@map("tours")
+}
+
+// ─── Bookings ─────────────────────────────────────────────────────────────
+
+model Booking {
+  id              String   @id @default(cuid())
+  tourId          String
+  tour            Tour     @relation(fields: [tourId], references: [id])
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  agentCode       String?
+  departureDate   DateTime
+  guests          Int      @default(1)
+  totalPrice      Float
+  // BookingStatus: PENDING | CONFIRMED | CANCELLED | COMPLETED
+  status          String   @default("PENDING")
+  // PaymentStatus: PENDING | PAID | REFUNDED
+  paymentStatus   String   @default("PENDING")
+  specialRequests String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  commission      Commission?
+  review          Review?
+
+  @@map("bookings")
+}
+
+// ─── Commissions ──────────────────────────────────────────────────────────
+
+model Commission {
+  id        String   @id @default(cuid())
+  agentId   String
+  agent     Agent    @relation(fields: [agentId], references: [id])
+  bookingId String   @unique
+  booking   Booking  @relation(fields: [bookingId], references: [id])
+  amount    Float
+  rate      Float
+  // Status: PENDING | APPROVED | PAID
+  status    String   @default("PENDING")
+  paidAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@map("commissions")
+}
+
+// ─── Articles ─────────────────────────────────────────────────────────────
+
+model Article {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  content     String
+  excerpt     String
+  coverImage  String?
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id])
+  // Status: DRAFT | PUBLISHED | ARCHIVED
+  status      String   @default("DRAFT")
+  category    String   @default("Travel Tips")
+  tags        String   @default("[]")
+  views       Int      @default(0)
+  publishedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("articles")
+}
+
+// ─── Reviews ──────────────────────────────────────────────────────────────
+
+model Review {
+  id        String   @id @default(cuid())
+  tourId    String
+  tour      Tour     @relation(fields: [tourId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  bookingId String?  @unique
+  booking   Booking? @relation(fields: [bookingId], references: [id])
+  rating    Int
+  title     String
+  content   String
+  images    String   @default("[]")
+  // Status: PENDING | APPROVED | REJECTED
+  status    String   @default("PENDING")
+  createdAt DateTime @default(now())
+
+  @@map("reviews")
+}
+
+// ─── Photos ───────────────────────────────────────────────────────────────
+
+model Photo {
+  id            String       @id @default(cuid())
+  userId        String
+  user          User         @relation(fields: [userId], references: [id])
+  destinationId String?
+  destination   Destination? @relation(fields: [destinationId], references: [id])
+  url           String
+  caption       String?
+  location      String?
+  likes         Int          @default(0)
+  createdAt     DateTime     @default(now())
+
+  @@map("photos")
+}
+
+// ─── Wishlists ────────────────────────────────────────────────────────────
+
+model Wishlist {
+  id            String       @id @default(cuid())
+  userId        String
+  user          User         @relation(fields: [userId], references: [id])
+  tourId        String?
+  tour          Tour?        @relation(fields: [tourId], references: [id])
+  destinationId String?
+  destination   Destination? @relation(fields: [destinationId], references: [id])
+  createdAt     DateTime     @default(now())
+
+  @@map("wishlists")
+}
+
+// ─── Guidelines ───────────────────────────────────────────────────────────
+
+model Guideline {
+  id          String   @id @default(cuid())
+  title       String
+  content     String
+  // Category: SAFETY | TRAVEL | BOOKING | VISA | GENERAL
+  category    String   @default("GENERAL")
+  isPublished Boolean  @default(true)
+  createdBy   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("guidelines")
+}

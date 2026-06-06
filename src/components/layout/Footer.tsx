@@ -109,7 +109,7 @@ export default function Footer() {
                   aria-label={label}
                   className="w-9 h-9 bg-white/5 hover:bg-gradient-to-br hover:from-primary hover:to-secondary rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
                 >
-                  <Icon className="w-4 h-4" />
+                  <Icon />
                 </a>
               ))}
             </div>
